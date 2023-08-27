@@ -1,13 +1,6 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#define MAX 100
-
-int arr[MAX];
-int size = 0;
-
-/*
+/**
+ * @aurthor: Aiyu Ayaan
 Develop and implement a menu driven program in C for the following Array operations
 
 a. Creating Array of N Integer elements.
@@ -18,8 +11,17 @@ c. Inserting an element (ELEM) at a given valid position (POS).
 
 d. Deleting an element at a given valid position (POS).
 
-e. Exit*/
+e. Exit
 
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+int arr[MAX];
+int size = 0;
 void createArray();
 void displayArray();
 void insertElement();
