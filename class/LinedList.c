@@ -18,14 +18,20 @@ struct Node
     struct Node *next;
 } typedef Node;
 
+#define _Node Node * // Define macro for Node *
+
 // Head
-Node *ROOT = NULL;
+_Node ROOT = NULL;
 
 // Function prototypes
 int is_underflow();
-Node *create_node(int);
-Node *trav_to_last_node();
-void insert_node(int);
+_Node create_node(int);
+_Node trav_to_last_node();
+int size();
+void insert_node();
+void insert_at_end(int);
+void insert_at_first(int);
+int insert_at_position(int, int);
 void display();
 
 void main()
@@ -33,20 +39,18 @@ void main()
     int choise;
     while (1)
     {
-        print("\n\nLinked List Program.\n1.Insert_node\n2.Display\n5.Exit\n\nEnter your choise :- ");
+        print("\n\nLinked List Program.\n1.Insert_node\n2.Display\n3.Check Size\n5.Exit\n\nEnter your choise :- ");
         scan_int(choise);
         switch (choise)
         {
         case 1:
-        {
-            int ele;
-            print("Enter value :- ");
-            scan_int(ele);
-            insert_node(ele);
-        }
-        break;
+            insert_node();
+            break;
         case 2:
             display();
+            break;
+        case 3:
+            printf("Size of Linked List is %d", size());
             break;
         case 5:
             exit(0);
@@ -66,40 +70,136 @@ int is_underflow()
 }
 
 // Function to create a new node with given data
-Node *create_node(int ele)
+_Node create_node(int ele)
 {
-    Node *temp = (Node *)malloc(sizeof(Node));
+    _Node temp = (_Node)malloc(sizeof(Node));
     temp->data = ele;
     temp->next = NULL;
     return temp;
 }
 
 // Function to traverse to the last node in the linked list
-Node *trav_to_last_node()
+_Node trav_to_last_node()
 {
-    Node *trav = ROOT;
+    _Node trav = ROOT;
     while (trav->next != NULL)
         trav = trav->next;
     return trav;
 }
 
-// Function to insert a new node with given data at the end of the linked list
-void insert_node(int ele)
+int size()
 {
-    Node *temp = create_node(ele);
+    if (is_underflow())
+        return 0;
+
+    int size = 0;
+    _Node trav = ROOT;
+    while (trav != NULL)
+    {
+        size++;
+        trav = trav->next;
+    }
+    return size;
+}
+
+void insert_node()
+{
+
+    int choise, ele, is_added = 1;
+    print("\nEnter value :- ");
+    scan_int(ele);
+    while (is_added)
+    {
+        print("\n1. At last\n2. At middle\n3. At First\nEnter your choise :- ");
+        scan_int(choise);
+        switch (choise)
+        {
+        case 1:
+        {
+            insert_at_end(ele);
+            is_added = 0;
+            continue;
+        }
+        case 2:
+        {
+            int pos;
+            print("\nEnter Position :- ");
+            scan_int(pos);
+            if (pos > size()) // if enter position is greater then the actual size of list
+            {
+                print("\nEnter valid position !!!");
+                continue;
+            }
+            int is_pos_avilable = insert_at_position(ele, pos);
+            if (is_pos_avilable == 0) // check for position 0
+            {
+                print("\nPosition must me greater than 0..");
+                continue;
+            }
+
+            is_added = 0;
+            continue;
+        }
+        case 3:
+        {
+            insert_at_first(ele);
+            is_added = 0;
+            continue;
+        }
+        default:
+            print("Enter valid Choise.\n");
+        }
+    }
+}
+
+// Function to insert a new node with given data at the end of the linked list
+void insert_at_end(int ele)
+{
+    _Node temp = create_node(ele);
     if (is_underflow())
     {
         ROOT = temp;
         return;
     }
-    Node *trav = trav_to_last_node();
+    _Node trav = trav_to_last_node();
     trav->next = temp;
+}
+
+// Function to insert a new node with given data at the any avilable position of the linked list
+int insert_at_position(int ele, int pos)
+{
+    if (pos == 0)
+        return 0;
+
+    if (pos == 1)
+    {
+        insert_at_first(ele);
+        return 1;
+    }
+    _Node temp = create_node(ele);
+    _Node trav = ROOT;
+    int i = 1;
+    while (i < pos - 1)
+    {
+        trav = trav->next;
+    }
+    temp->next = trav->next;
+    trav->next = temp;
+    return 1;
+}
+
+// Function to insert a new node with given data at the first position of the linked list
+void insert_at_first(int ele)
+{
+    _Node temp = create_node(ele);
+    temp->next = ROOT;
+    ROOT = temp;
 }
 
 // Function to display the data in all nodes of the linked list
 void display()
 {
-    Node *trav = ROOT;
+    _Node trav = ROOT;
     while (trav != NULL)
     {
         print_int(trav->data);
