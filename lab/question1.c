@@ -15,6 +15,7 @@ void push(int);
 int pop();
 int peekStack();
 void displayStack();
+void statusStack();
 
 // ----------------------- Queue -----------------------------
 
@@ -25,9 +26,10 @@ void insert(int);
 int delete();
 int peekQueue();
 void displayQueue();
+void statusQueue();
 
 // ----------------------- Main ------------------------------
-void main(int *args[], char *argv[])
+void main()
 {
     int type_choice, val;
     while (1)
@@ -54,7 +56,6 @@ void main(int *args[], char *argv[])
             printf("Wrong selection!!! Try again!!!\n");
         }
     }
-    return 0;
 }
 
 void stackPart()
@@ -63,7 +64,7 @@ void stackPart()
     while (1)
     {
         printf("\n\n***** MENU *****\n");
-        printf("1. Push\n2. Pop\n3. Peek\n4. Display\n5. Exit\n");
+        printf("1. Push\n2. Pop\n3. Peek\n4. Display\n5. Status\n6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -90,8 +91,10 @@ void stackPart()
         case 4:
             displayStack();
             break;
-
         case 5:
+            statusStack();
+            break;
+        case 6:
             exit(0);
 
         default:
@@ -106,7 +109,7 @@ void queuePart()
     while (1)
     {
         printf("\n\n***** MENU *****\n");
-        printf("1. Insert\n2. Delete\n3. Peek\n4. Display\n5. Exit\n");
+        printf("1. Insert\n2. Delete\n3. Peek\n4. Display\n5. Status \n6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -135,6 +138,9 @@ void queuePart()
             break;
 
         case 5:
+            statusQueue();
+            break;
+        case 6:
             exit(0);
 
         default:
@@ -196,6 +202,11 @@ void displayStack()
     }
 }
 
+void statusStack()
+{
+    printf("Stack is having %d space and %d empty space !!", (top + 1), (MAX - (top + 1)));
+}
+
 //  ----------------------- Queue -----------------------------
 
 void insert(int val)
@@ -254,4 +265,9 @@ void displayQueue()
             printf("%d\t", queue[i]);
         printf("\n");
     }
+}
+
+void statusQueue()
+{
+    printf("Queue is having %d space element and %d empty space !!", (rear + 1), (MAX - (rear + 1)));
 }
