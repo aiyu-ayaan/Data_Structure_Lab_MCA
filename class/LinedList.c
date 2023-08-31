@@ -13,9 +13,11 @@
 #define _valid_message printf("\nEnter valid choice !!!!")
 #define _valid_pos_message printf("\nEnter valid Position !!!!")
 #define _c_d_message printf("\n1.At last\n2.At middle\n3.At First\nEnter your choice :- ")
+#define _empty_list_message printf("\nLinked list is empty !!.")
 #define _added_message printf("\nNode is Added!!!")
 #define _deleted_message printf("\nNode is Deleted !!")
 #define _position_err_message printf("\nPosition must me greater than 0..")
+#define _element_not_found print("\nEntered element not found !!")
 #define _bye_message printf("\nGood Bye ~_~")
 
 //  Node
@@ -45,6 +47,8 @@ void delete_the_last_element();
 void delete_at_end();
 void delete_at_first();
 int delete_at_position(int);
+int search_value(int);
+void delete_by_value(int);
 
 void main()
 {
@@ -52,7 +56,7 @@ void main()
     print("\n\n--------------------------Linked List Program.--------------------------");
     while (1)
     {
-        print("\n1.Insert Node\n2.Display\n3.Check Size\n4.Delete Node\n5.Exit\n\nEnter your choice :- ");
+        print("\n\n1.Insert Node\n2.Display\n3.Check Size\n4.Delete Node\n5.Delete By Value\n6.Search Item\n7.Exit\n\nEnter your choice :- ");
         scan_int(choice);
         switch (choice)
         {
@@ -69,6 +73,26 @@ void main()
             delete_node();
             break;
         case 5:
+        {
+            int ele;
+            print("Enter value you want to delete :- ");
+            scan_int(ele);
+            delete_by_value(ele);
+        }
+        break;
+        case 6:
+        {
+            int ele;
+            print("Enter value you want to search :- ");
+            scan_int(ele);
+            int pos = search_value(ele);
+            if (pos == -1)
+                _element_not_found;
+            else
+                printf("\nEntered element is at %d position", (pos + 1));
+        }
+        break;
+        case 7:
         {
             _bye_message;
             exit(0);
@@ -220,6 +244,11 @@ void insert_at_first(int ele)
 // Function to display the data in all nodes of the linked list
 void display()
 {
+    if (is_underflow())
+    {
+        _empty_list_message;
+        return;
+    }
     _Node trav = ROOT;
     while (trav != NULL)
     {
@@ -228,18 +257,21 @@ void display()
     }
 }
 
+// Function to delete a node from the linked list based on user's choice
 void delete_node()
 {
     if (is_underflow())
     {
-        print("\nLinked list is empty !!.");
+        _empty_list_message;
         return;
     }
+
     int choice, is_deleted = 1;
     while (is_deleted)
     {
         _c_d_message;
         scan_int(choice);
+
         switch (choice)
         {
         case 1:
@@ -253,13 +285,16 @@ void delete_node()
             int pos;
             print("\nEnter Position :- ");
             scan_int(pos);
-            if (pos > size()) // if enter position is greater then the actual size of list
+
+            if (pos > size()) // if entered position is greater than the actual size of the list
             {
                 _valid_pos_message;
                 continue;
             }
-            int is_pos_avilable = delete_at_position(pos);
-            if (is_pos_avilable == 0) // check for position 0
+
+            int is_pos_available = delete_at_position(pos);
+
+            if (is_pos_available == 0) // check for position 0
             {
                 _position_err_message;
                 continue;
@@ -274,34 +309,35 @@ void delete_node()
             is_deleted = 0;
             continue;
         }
-
         default:
             _valid_message;
         }
     }
 }
 
+// Function to delete the last node from the linked list
 void delete_at_end()
 {
-    // their is only 1 node
+    // If there's only 1 node
     if (size() == 1)
     {
         delete_the_last_element();
         return;
     }
 
-    // traverse to send last node
+    // Traverse to find the second last node
     _Node trav = ROOT;
     while (trav->next->next != NULL)
         trav = trav->next;
 
-    // Now trav is pointing to send last node
+    // Now trav is pointing to the second last node
     _Node last_node = trav->next;
     trav->next = NULL;
     free(last_node);
     _deleted_message;
 }
 
+// Function to delete the last element when there's only 1 node
 void delete_the_last_element()
 {
     _Node last_item = ROOT;
@@ -309,6 +345,7 @@ void delete_the_last_element()
     free(last_item);
 }
 
+// Function to delete the first node from the linked list
 void delete_at_first()
 {
     if (size() == 1)
@@ -316,30 +353,34 @@ void delete_at_first()
         delete_the_last_element();
         return;
     }
+
     _Node yet_first = ROOT;
     ROOT = yet_first->next;
     free(yet_first);
     _deleted_message;
 }
 
+// Function to delete a node from the linked list at a specified position
 int delete_at_position(int pos)
 {
     if (pos == 0)
         return 0;
+
     if (pos == 1)
     {
         delete_at_first();
         return 1;
     }
+
     if (pos == size())
     {
         delete_at_end();
         return 1;
     }
+
     int i = 1;
     _Node trav = ROOT;
     while (i++ < pos - 1)
-
         trav = trav->next;
 
     _Node delete_node = trav->next;
@@ -347,4 +388,35 @@ int delete_at_position(int pos)
     free(delete_node);
     _deleted_message;
     return 1;
+}
+
+// Function to search for a value in the linked list and return its position
+int search_value(int ele)
+{
+    _Node trav = ROOT;
+    int pos = 0;
+
+    while (trav != NULL)
+    {
+        if (trav->data == ele)
+            return pos;
+        trav = trav->next;
+        pos++;
+    }
+
+    return -1;
+}
+
+// Function to delete a node from the linked list based on a given value
+void delete_by_value(int ele)
+{
+    int pos = search_value(ele);
+
+    if (pos == -1)
+    {
+        _element_not_found;
+        return;
+    }
+
+    delete_at_position((++pos)); // ++ because search_value return n-1 postion.
 }
