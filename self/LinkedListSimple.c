@@ -11,8 +11,8 @@ Node *ROOT = NULL;
 
 /**
  * @brief Insert a node at the beginning of the linked list
-*/
-void insert_at_beginning(int ele) 
+ */
+void insert_at_beginning(int ele)
 {
     Node *new_node = (Node *)malloc(sizeof(Node));
     new_node->data = ele;
@@ -30,7 +30,7 @@ void insert_at_beginning(int ele)
 
 /**
  * @brief Insert a node at the end of the linked list
-*/
+ */
 
 void insert_at_end(int ele)
 {
@@ -54,7 +54,7 @@ void insert_at_end(int ele)
 
 /**
  * @brief Insert a node at the middle of the linked list
-*/
+ */
 
 void insert_at_middle(int ele, int pos)
 {
@@ -81,7 +81,7 @@ void insert_at_middle(int ele, int pos)
 
 /**
  * @brief Delete a node at the beginning of the linked list
-*/
+ */
 void delete_at_beginning()
 {
     if (ROOT == NULL) // if list is empty
@@ -98,7 +98,7 @@ void delete_at_beginning()
 
 /**
  * @brief Delete a node at the end of the linked list
-*/
+ */
 
 void delete_at_end()
 {
@@ -120,7 +120,7 @@ void delete_at_end()
 
 /**
  * @brief Delete a node at the middle of the linked list
-*/
+ */
 void delete_at_middle(int pos)
 {
     if (ROOT == NULL) // if list is empty
@@ -142,9 +142,19 @@ void delete_at_middle(int pos)
     }
 }
 
+void display()
+{
+    Node *temp = ROOT;
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+}
+
 /**
  * @brief Display the linked list
-*/
+ */
 void main()
 {
     insert_at_end(10);
@@ -158,4 +168,5 @@ void main()
     delete_at_beginning();
     delete_at_end();
     delete_at_middle(3);
+    display();
 }
